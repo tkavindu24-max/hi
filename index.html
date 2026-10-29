@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ HYPER LOVE BLASTER ⚡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Crazy Animated Rainbow Background */
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400% 400%;
+            animation: glowing-bg 3s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes glowing-bg {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        /* Full Screen Confetti Canvas */
+        #confetti-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* Main Container */
+        .crazy-container {
+            background: rgba(0, 0, 0, 0.7);
+            border: 5px solid #00ffcc;
+            box-shadow: 0 0 20px #00ffcc, inset 0 0 20px #00ffcc;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            z-index: 10;
+            position: relative;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+        
+        /* Custom Scrollbar */
+        .crazy-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .crazy-container::-webkit-scrollbar-thumb {
+            background: #ff00ff;
+            border-radius: 10px;
+        }
+
+        /* Screen Shake Animation */
+        .shake-it {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both infinite;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0) rotate(-2deg); }
+            20%, 80% { transform: translate3d(3px, 0, 0) rotate(2deg); }
+            30%, 50%, 70% { transform: translate3d(-5px, 0, 0) rotate(-4deg); }
+            40%, 60% { transform: translate3d(5px, 0, 0) rotate(4deg); }
+        }
+
+        h1 {
+            font-family: 'Black Ops One', cursive;
+            color: #fff;
+            font-size: 35px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+            margin-bottom: 10px;
+            animation: pulse-neon 1s infinite alternate;
+        }
+
+        @keyframes pulse-neon {
+            0% { text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff; transform: scale(1); }
+            100% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff; transform: scale(1.05); }
+        }
+
+        p.subtitle {
+            color: #ffff00;
+            font-weight: 900;
+            font-size: 16px;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px #ff0000;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            background: #111;
+            border: 3px solid #ff00ff;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 900;
+            text-align: center;
+            text-transform: uppercase;
+            border-radius: 10px;
+            outline: none;
+            box-shadow: 0 0 15px #ff00ff;
+            transition: 0.2s;
+        }
+
+        .input-group input[type="text"]:focus {
+            border-color: #00ffcc;
+            box-shadow: 0 0 25px #00ffcc;
+            transform: scale(1.05);
+        }
+
+        .or-text {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 900;
+            margin: 10px 0;
+            text-shadow: 2px 2px 0px #ff0000;
+        }
+
+        /* Custom File Upload Button */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-btn {
+            width: 100%;
+            background: #111;
+            color: #00ffcc;
+            font-size: 16px;
+            font-weight: 900;
+            padding: 15px;
+            border: 3px dashed #00ffcc;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .file-upload-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .file-upload-wrapper:hover .file-upload-btn {
+            background: #00ffcc;
+            color: #000;
+            box-shadow: 0 0 15px #00ffcc;
+        }
+
+        #photo-preview-container {
+            display: none;
+            margin: 10px auto 20px;
+        }
+
+        .photo-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #ff00ff;
+            object-fit: cover;
+            box-shadow: 0 0 20px #ff00ff;
+            animation: pulse-neon 1.5s infinite alternate;
+        }
+
+        .crazy-btn {
+            width: 100%;
+            background: #ff00ff;
+            color: #fff;
+            font-family: 'Black Ops One', cursive;
+            font-size: 22px;
+            padding: 18px;
+            border: 4px solid #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #ff00ff, inset 0 0 10px #fff;
+            transition: all 0.1s;
+            text-transform: uppercase;
+        }
+
+        .crazy-btn:hover {
+            background: #00ffcc;
+            box-shadow: 0 0 30px #00ffcc, inset 0 0 20px #fff;
+            transform: scale(1.1) rotate(-3deg);
+        }
+
+        .crazy-btn:active {
+            transform: scale(0.9);
+        }
+
+        #loading-ui {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .crazy-spinner {
+            width: 80px;
+            height: 80px;
+            border: 10px solid transparent;
+            border-top: 10px solid #ff00ff;
+            border-bottom: 10px solid #00ffcc;
+            border-radius: 50%;
+            margin: 0 auto;
+            animation: spin-crazy 0.5s linear infinite;
+        }
+
+        @keyframes spin-crazy {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .loading-text {
+            color: #fff;
+            margin-top: 15px;
+            font-size: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #fff;
+            animation: flash 0.2s infinite alternate;
+        }
+
+        @keyframes flash {
+            0% { opacity: 1; color: #ff00ff; }
+            100% { opacity: 0; color: #00ffcc; }
+        }
+
+        #result-ui {
+            display: none;
+            margin-top: 10px;
+            animation: blast-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes blast-in {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.3); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .huge-percentage {
+            font-family: 'Black Ops One', cursive;
+            font-size: 70px;
+            color: #fff;
+            text-shadow: 5px 5px 0px #ff0000, -5px -5px 0px #0000ff, 0 0 30px #fff;
+            margin: 10px 0;
+            line-height: 1;
+        }
+
+        #crazy-message {
+            color: #00ffcc;
+            font-size: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px #000;
+            margin-bottom: 10px;
+        }
+
+        #photo-comment {
+            color: #fffb00;
+            font-size: 16px;
+            font-weight: 700;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px dashed #fffb00;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="crazy-container" id="main-box">
+        <h1>💖 LOVE BLASTER 3000 💖</h1>
+        <p class="subtitle">MAXIMUM OVERDRIVE MODE</p>
+
+        <div id="input-ui">
+            <div class="input-group">
+                <input type="text" id="p1" placeholder="PLAYER 1 NAME" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <input type="text" id="p2" placeholder="PLAYER 2 NAME" autocomplete="off">
+            </div>
+            
+            <div class="or-text">⚡ OR ⚡</div>
+
+            <div class="file-upload-wrapper">
+                <button class="file-upload-btn">📸 UPLOAD COUPLE PHOTO!</button>
+                <input type="file" id="photo-upload" accept="image/*" onchange="previewPhoto(event)">
+            </div>
+            
+            <div id="photo-preview-container">
+                <img id="input-photo-preview" class="photo-circle" src="">
+            </div>
+
+            <button class="crazy-btn" onclick="startCrazyCalc()">💥 BLAST IT! 💥</button>
+        </div>
+
+        <div id="loading-ui">
+            <div class="crazy-spinner"></div>
+            <div class="loading-text">CALCULATING CRAZINESS...</div>
+        </div>
+
+        <div id="result-ui">
+            <div id="result-photo-container" style="display: none; margin-bottom: 15px;">
+                <img id="result-photo" class="photo-circle" src="">
+            </div>
+            <div class="huge-percentage" id="final-perc">0%</div>
+            <div id="crazy-message"></div>
+            <div id="photo-comment" style="display:none;"></div>
+            <button class="crazy-btn" style="background:#00ffcc; border-color:#000; color:#000; margin-top:10px;" onclick="resetCrazy()">🔄 DO IT AGAIN!</button>
+        </div>
+    </div>
+
+    <script>
+        // --- ARCADE SOUND SYNTHESIZER ---
+        let audioCtx = null;
+        function playArcadeSound(type) {
+            try {
+                if (!window.AudioContext && !window.webkitAudioContext) return;
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                if (type === 'start') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.5);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+                } else if (type === 'calc') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300 + Math.random()*500, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                } else if (type === 'boom') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 1);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
+                    osc.start(); osc.stop(audioCtx.currentTime + 1);
+                }
+            } catch (e) {}
+        }
+
+        // --- CRAZY CONFETTI SYSTEM ---
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let bursting = false;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 15 + 5;
+                this.speedX = (Math.random() * 20) - 10;
+                this.speedY = (Math.random() * -20) - 5;
+                this.gravity = 0.5;
+                this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                this.rotation = Math.random() * 360;
+                this.rotSpeed = (Math.random() * 20) - 10;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += this.gravity;
+                this.rotation += this.rotSpeed;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+                ctx.restore();
+            }
+        }
+
+        function fireConfetti() {
+            bursting = true;
+            for(let i=0; i<150; i++) {
+                particles.push(new Particle(canvas.width/2, canvas.height/2 + 100));
+            }
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (bursting) {
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                    if (particles[i].y > canvas.height) {
+                        particles.splice(i, 1);
+                        i--;
+                    }
+                }
+            }
+            requestAnimationFrame(animateConfetti);
+        }
+        animateConfetti();
+
+        // --- SPEECH SYNTHESIS ---
+        let voices = [];
+        try {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
+            }
+        } catch (e) {}
+
+        function crazySpeak(text) {
+            try {
+                if (!('speechSynthesis' in window)) return;
+                window.speechSynthesis.cancel();
+                let msg = new SpeechSynthesisUtterance(text);
+                if (voices.length === 0) voices = window.speechSynthesis.getVoices();
+                let voice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Google US English'));
+                if(voice) msg.voice = voice;
+                
+                msg.pitch = 1.8; 
+                msg.rate = 1.2;  
+                msg.volume = 1;
+                window.speechSynthesis.speak(msg);
+            } catch (e) {}
+        }
+
+        // --- PHOTO UPLOAD LOGIC ---
+        let uploadedFile = null;
+        let photoDataUrl = "";
+
+        function previewPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                uploadedFile = file;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photoDataUrl = e.target.result;
+                    const previewContainer = document.getElementById('photo-preview-container');
+                    const img = document.getElementById('input-photo-preview');
+                    img.src = photoDataUrl;
+                    previewContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // --- MAIN LOGIC ---
+        let crazyInterval = null;
+
+        function startCrazyCalc() {
+            let n1 = document.getElementById('p1').value.trim();
+            let n2 = document.getElementById('p2').value.trim();
+
+            if (!n1 && !n2 && !uploadedFile) {
+                alert("ENTER NAMES OR UPLOAD A PHOTO OR I'LL EXPLODE!");
+                return;
+            }
+
+            playArcadeSound('start');
+            crazySpeak("Initiating hyper blast!");
+
+            document.getElementById('input-ui').style.display = 'none';
+            document.getElementById('loading-ui').style.display = 'block';
+            
+            document.getElementById('main-box').classList.add('shake-it');
+
+            let soundTicks = 0;
+            crazyInterval = setInterval(() => {
+                playArcadeSound('calc');
+                soundTicks++;
+                if (soundTicks > 20) clearInterval(crazyInterval);
+            }, 100);
+
+            setTimeout(() => {
+                showCrazyResult(n1, n2);
+            }, 2500);
+        }
+
+        function showCrazyResult(n1, n2) {
+            document.getElementById('main-box').classList.remove('shake-it');
+            document.getElementById('loading-ui').style.display = 'none';
+            document.getElementById('result-ui').style.display = 'block';
+
+            let perc = 0;
+
+            // Calculation based on photo or names
+            if (uploadedFile) {
+                // Generate a random-feeling but consistent percentage based on file size and name length
+                let seed = uploadedFile.size + uploadedFile.name.length;
+                perc = (seed * 13) % 101; 
+                if (perc < 40) perc += 35; // Bump up photo scores so couples don't feel bad!
+                
+                // Show uploaded photo in result
+                document.getElementById('result-photo').src = photoDataUrl;
+                document.getElementById('result-photo-container').style.display = 'block';
+            } else {
+                let str = (n1 + n2).toLowerCase();
+                let sum = 0;
+                for(let i=0; i<str.length; i++) sum += str.charCodeAt(i);
+                perc = (sum * 7) % 101; 
+                if (perc < 20) perc += 40;
+                document.getElementById('result-photo-container').style.display = 'none';
+            }
+
+            // Blast UI
+            playArcadeSound('boom');
+            fireConfetti();
+            document.getElementById('final-perc').innerText = perc + "%";
+
+            let msg = "";
+            let extraComment = "";
+
+            if(perc >= 90) {
+                msg = "🔥 ABSOLUTE FIRE! MARRY NOW! 🔥";
+                extraComment = "Look at this picture! You two are breaking the cuteness scale! Server overload!";
+            } else if(perc >= 70) {
+                msg = "⚡ ELECTRIC CONNECTION! ⚡";
+                extraComment = "Wow! The chemistry in this photo is sparking! Keep that energy up!";
+            } else {
+                msg = "🤪 CHAOTIC ENERGY! 🤪";
+                extraComment = "Wild combination! You two definitely keep things interesting!";
+            }
+
+            document.getElementById('crazy-message').innerText = msg;
+            
+            const commentDiv = document.getElementById('photo-comment');
+            if (uploadedFile) {
+                commentDiv.innerText = extraComment;
+                commentDiv.style.display = 'block';
+            } else {
+                commentDiv.style.display = 'none';
+            }
+
+            // Speak the result
+            let speechText = `BOOM! The result is ${perc} percent! ${msg}`;
+            if (uploadedFile) speechText += ` ${extraComment}`;
+            crazySpeak(speechText);
+        }
+
+        function resetCrazy() {
+            playArcadeSound('start');
+            // document.getElementById('p1').value = "";
+            // document.getElementById('p2').value = "";
+            // Keep inputs if they want to try again, just reset the upload
+            
+            document.getElementById('result-ui').style.display = 'none';
+            document.getElementById('input-ui').style.display = 'block';
+            
+            document.getElementById('photo-upload').value = "";
+            uploadedFile = null;
+            photoDataUrl = "";
+            document.getElementById('photo-preview-container').style.display = 'none';
+            
+            bursting = false;
+            particles = [];
+            if('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+    </script>
+</body>
+</html>
